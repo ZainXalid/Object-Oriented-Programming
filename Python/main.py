@@ -4,8 +4,9 @@ Created on Fri Feb 23 05:49:02 2024
 
 @author: mzain
 """
+import csv
 
-class item():
+class Item():
     
     pay_rate = 0.8 # 20% Discount
     all = []
@@ -21,7 +22,7 @@ class item():
         self.quantity = quantity        
         
         #Action
-        item.all.append(self)
+        Item.all.append(self)
         
     def calculate_total_price(self):
         return self.price * self.quantity
@@ -29,18 +30,47 @@ class item():
     def apply_discount(self):
         self.price = self.price * self.pay_rate
         
+    @classmethod
+    def instantiate_from_csv(cls): #mandatory class (cls) reference 
+        '''
+        Different from @static method in a sense that it still has relation 
+        with this class (has use only for this class) but usually do
+        mainpulate data structure to instantiate objects, like we 
+        do with csv
+        
+        Main Difference is mandatory class (cls) reference
+        '''
+        with open('items.csv', 'r') as f:
+            reader = csv.DictReader(f)
+            items = list(reader)
+        for item in items:
+            Item(            
+                name=item.get('name'),
+                price=float(item.get('price')),
+                quantity=int(item.get('quantity'))
+            )
+    
+    @staticmethod        
+    def is_integer(num): #no mandatory reference like cls or self
+        '''
+        Different from @classmethod in a sense that it still has relation 
+        with this class (has use only for this class) 
+        but is not unique per instance!
+        
+        Main Difference is no mandatory reference like cls or self
+        '''
+        
+        #Return True for integer even if a float has point zeros
+        if isinstance(num, float):
+            return num.is_integer()#built in is_integer
+        elif isinstance(num, int):
+            return True
+        else:
+            return False
+    
     def __repr__(self):
         return f"Item ('{self.name}', {self.price}, {self.quantity})"
 
-item1 = item('Phone',100,1)
-item2 = item('Laptop',1000,1)
 
-#print('Total Price  ',item1.calculate_total_price())
-
-item1.apply_discount()
-item2.apply_discount()
-
-#print(item1.calculate_total_price())
-#print(item2.calculate_total_price())
-
-print(item.all)
+# Item.instantiate_from_csv()
+print(Item.all)
