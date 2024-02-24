@@ -2,7 +2,8 @@ import csv
 
 class Item():
     
-    pay_rate = 0.8 # 20% Discount
+    #Class Variables
+    pay_rate = 0.9 # 10% Discount
     all = []
     
     def __init__(self, name : str, price : int, quantity=1):
@@ -10,6 +11,7 @@ class Item():
         assert price >= 0, f"Price {price} is not >= 0"
         assert quantity >= 0, f"Quantity {quantity} is not >= 0"
 
+        #instance Variables
         #Assign to self object
         self.__name = name
         self.__price = price
@@ -18,17 +20,19 @@ class Item():
         #Action
         Item.all.append(self)
     
+    #Encapsulation
     @property
-    def name(self):
+    def get_name(self):
         return self.__name
     
-    @name.setter    
-    def name(self, value):
+    @get_name.setter    
+    def set_name(self, value):
         if len(value) > 10:
             raise Exception('Name can not be greater than 10 characters')
         else:
             self.__name = value
-            
+    
+    #Encapsulation    
     @property
     def price(self):
         return self.__price
@@ -79,8 +83,27 @@ class Item():
             return True
         else:
             return False
-        
+
+    #Abstraction
+    def __connect(self,smtp):
+        pass 
     
+    #Abstraction 
+    def __body(self):
+        print(f'''Hello,
+        We've {self.__name} {self.quantity} times.            
+        Regards,
+        Zain''')  
+    
+    #Abstraction
+    def __send(self):
+        pass    
+                 
+    def send_email(self):
+        self.__connect('')
+        self.__body()
+        self.__send()
+            
     def __repr__(self):
         return f"{self.__class__.__name__} ('{self.name}', {self.__price}, {self.quantity})"
 
